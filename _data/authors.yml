@@ -1,14 +1,15 @@
 # Authors
 
-billy_rick:
-  name: Billy Rick
-  web: http://thewhip.com
-  email: billy@rick.com
-  bio: "What do you want, jewels? I am a very extravagant man."
+luvletter:
+  name: 朱天 
+  web: http://blog.uvletter.com
+  email: skylypig@gmail.com
+  bio: "种一棵树最好的时间是十年前，其次是现在"
   avatar: bio-photo-2.jpg
-  twitter: extravagantman
+  github: uvletter
+  twitter: 
   google:
-    plus: BillyRick
+    plus: 
 
 cornelius_fiddlebone:
   name: Cornelius Fiddlebone

@@ -11,13 +11,13 @@
     width: 100%;
     vertical-align: top;
     margin: 0 0 50px;
-    padding: 4px 20px;
+    padding: 4px 40px;
     background-color: $black;
 
-    @include media($medium) {
-      width: auto;
-      @include rounded(0 0 10px 10px);
-    }
+    //@include media($medium) {
+    //  width: auto;
+    //  @include rounded(0 0 10px 10px);
+    //}
 
     @include clearfix;
   }
@@ -27,12 +27,12 @@
     float: left;
     list-style: none;
     text-align: center;
-    @include font-size(24,no);
+    @include font-size(30,no);
     text-transform: uppercase;
     color: $white;
 
     @include media($medium) {
-      @include font-size(14,no);
+      @include font-size(16,no);
     }
 
     a:hover {

@@ -1,16 +1,13 @@
 # Site navigation links
 
-- title: About
-  url: /about/
+- title: 首页
+  url: /
 
-- title: Articles
-  url: /articles/
+- title: 归档 
+  url: /tags
 
-- title: Blog
-  url: /blog/
+- title: 关于我
+  url: /about
 
-- title: Theme Setup
-  url: /theme-setup/
-
-- title: Search
-  url: /search/
+- title: +订阅 
+  url: /sitemap.xml
