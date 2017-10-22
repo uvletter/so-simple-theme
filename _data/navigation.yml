@@ -6,8 +6,8 @@
 - title: 归档 
   url: /tags
 
-- title: 关于我
-  url: /about
-
 - title: +订阅 
   url: /feed.xml
+
+- title: 关于我
+  url: /about
