@@ -1,22 +1,27 @@
 ---
 layout: page
 title: About me
-excerpt: "So Simple is a responsive Jekyll theme for your words and images."
-modified: 2014-08-08T19:44:38.564948-04:00
+modified: 2017-10-22 23:00:00 +08:00
 ---
 
-Looking for a simple, responsive, theme for your Jekyll powered blog? Well look no further. Here be **So Simple Theme**, the follow up to [**Minimal Mistakes**](http://mmistakes.github.io/minimal-mistakes) --- by designer slash illustrator [Michael Rose](http://mademistakes.com).
+## 自我介绍
 
-## So Simple Theme is all about:
+* 生在江城，毕业于某勃学四本，如今漂泊上海，把他乡当做故乡
+* Luv Letter这个名字取自岩井俊二的《情书》，喜欢电影娓娓道来的风格
+* 狂热的动漫Fan，(伪)二次元宅
+* 现在是一名后端工程师，喜欢学习研究算法，虽然不会
+* 常羡慕在学校里的闲暇时光
 
-* Responsive templates. Looking good on mobile, tablet, and desktop.
-* Gracefully degrading in older browsers. Compatible with Internet Explorer 9+ and all modern browsers.
-* Minimal embellishments and subtle animations.
-* Optional large feature images for posts and pages.
-* [Custom 404 page]({{ site.url }}/404.html) to get you started.
-* [Simple site search](https://github.com/christian-fei/Simple-Jekyll-Search)
-* Support for Disqus Comments
+## 个人项目
 
-<a markdown="0" href="{{ site.url }}/theme-setup" class="btn">Install So Simple Theme</a>
+* [uvletter.github.io](https://github.com/uvletter/uvletter.github.io)：本博客，使用Jekyll和Github Pages搭建
+* [TinyS](https://github.com/uvletter/TinyS)：一个C实现的异步，事件驱动的HTTP服务器
+* [bubble](https://github.com/uvletter/bubble)：知乎话题爬虫+展示网页
 
-[^1]: Example: *domain.com/category-name/post-title*
+## 联系方式
+
+欢迎大家在评论区和我互动交流，下面是我其它的一些联系方式
+
+* 邮箱 skylypig@gmail.com
+* Github [uvletter](https://github.com/uvletter)
+* 微博 [生活在别处t_t](http://weibo.com/u/3863737276)
