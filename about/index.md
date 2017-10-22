@@ -19,6 +19,6 @@ modified: 2017-10-22 23:00:00 +08:00
 
 ## 怎么找到我
 
+* [Github](https://github.com/uvletter)
+* [微博](http://weibo.com/u/3863737276)
 * 邮箱：skylypig@gmail.com
-* Github：[uvletter](https://github.com/uvletter)
-* 微博：[生活在别处t_t](http://weibo.com/u/3863737276)
