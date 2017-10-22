@@ -8,10 +8,6 @@
 
 #main {
     margin-bottom: 3em;
-}
-
-.entry,
-.hentry {
 	@include clearfix;
 	border-bottom: 1px solid lighten($black,80);
 	border-bottom: 1px solid rgba($black,.10);
