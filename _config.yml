@@ -35,8 +35,8 @@ exclude: ["lib", "config.rb", "Capfile", "config", "log", "Rakefile", "Rakefile.
 
 # Site owner
 owner:
-  name: 朱天
-  avatar: bio-photo.jpg
+  name: Luv Letter
+  avatar: bio-photo.jepg
   email: skylypig@gmail.com
   disqus-shortname: uvletter
   twitter: #username
