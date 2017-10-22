@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: page
 title: About me
 modified: 2017-10-22 23:00:00 +08:00
 ---
