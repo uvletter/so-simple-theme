@@ -57,6 +57,8 @@ AbstractUnpooledSlicedByteBuf(ByteBuf buffer, int index, int length) {
 
 以上为 `AbstractUnpooledSlicedByteBuf` 类的构造函数，比较简单，就不详细介绍了。
 
+下面来看看 `AbstractUnpooledSlicedByteBuf` 对 `ByteBuf` 接口的实现代码，以 `getBytes` 方法为例：
+
 ```java
 @Override
 public ByteBuf getBytes(int index, ByteBuffer dst) {
@@ -137,11 +139,13 @@ private int addComponent0(boolean increaseWriterIndex, int cIndex, ByteBuf buffe
 }
 ```
 
-这是添加一个新的 `ByteBuf` 的逻辑，核心是 `offset` 和 `endOffset` ，分别指代一个   `ByteBuf` 在 `CompositeByteBuf` 中开始和结束的索引，它们是唯一标记了这个 `ByteBuf` 在 `CompositeByteBuf` 中的位置。
+这是添加一个新的 `ByteBuf` 的逻辑，核心是 `offset` 和 `endOffset` ，分别指代一个   `ByteBuf` 在 `CompositeByteBuf` 中开始和结束的索引，它们唯一标记了这个 `ByteBuf` 在 `CompositeByteBuf` 中的位置。
 
 弄清楚了这个，我们会发现上面的代码无外乎做了两件事：
 1. 把 `ByteBuf` 封装成 `Component` 加到 `components` 合适的位置上
 2. 使 `components` 里的每个 `Component` 的 `offset` 和 `endOffset` 值都正确
+
+下面来看看 `CompositeByteBuf` 对 `ByteBuf` 接口的实现代码，同样以 `getBytes` 方法为例：
 
 ```java
 @Override
@@ -193,6 +197,8 @@ public int toComponentIndex(int offset) {
 }
 ```
 
-同样是以 `getBytes` 为例，可以看到是先将 `index` 转换成对应 `Component` 在 `components` 中的索引，然后从这个 `Component` 开始往后循环取字节，直到读完。这里有个小trick，因为 `components` 是有序排列的，所以 `toComponentIndex` 做索引转换时没有直接遍历，而是用的二分查找。
+可以看到 `CompositeByteBuf` 在处理 `index` 时是先将其转换成对应 `Component` 在 `components` 中的索引，以及在 `Component` 中的偏移，然后从这个 `Component` 的这个偏移开始，往后循环取字节，直到读完。
 
-今天写得有点累了，留个坑，下一篇再填上。
+NOTE：这里有个小trick，因为 `components` 是有序排列的，所以 `toComponentIndex` 做索引转换时没有直接遍历，而是用的二分查找。
+
+今天写得有点累了，这里留个坑，下一篇再填上。
