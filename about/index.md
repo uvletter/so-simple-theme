@@ -13,7 +13,7 @@ modified: 2017-10-29 15:34:00 +08:00
 * 现在是一名后端工程师，喜欢算法，虽然不会
 * 毕业后常羡慕在学校的闲暇时光
 
-### 项目
+### 我的项目
 
 * [uvletter.github.io](https://github.com/uvletter/uvletter.github.io)：本博客，使用Jekyll和Github Pages搭建
 * [TinyS](https://github.com/uvletter/TinyS)：一个C实现的异步，事件驱动的HTTP服务器
