@@ -29,21 +29,23 @@ Netty 的零拷贝体现在以下几个方面
 以下以 `AbstractUnpooledSlicedByteBuf` 为例讲解 `slice` 的零拷贝原理，至于内存池化的实现 `PooledSlicedByteBuf` ，因为内存池要通过引用计数来控制内存的释放，所以代码里会出现很多与本文主题无关的逻辑，这里就不拿来举栗子了。
 
 ```java 
-//切片ByteBuf的构造函数，其中字段adjustment为切片ByteBuf相对于被切片ByteBuf的偏移量，两个ByteBuf共用一块内存空间,字段buffer为实际存储数据的ByteBuf
+// 切片ByteBuf的构造函数，其中字段adjustment为切片ByteBuf相对于被切片ByteBuf的偏移
+// 量，两个ByteBuf共用一块内存空间,字段buffer为实际存储数据的ByteBuf
 AbstractUnpooledSlicedByteBuf(ByteBuf buffer, int index, int length) {
     super(length);
     checkSliceOutOfBounds(index, length, buffer);//检查slice是否越界
     
     if (buffer instanceof AbstractUnpooledSlicedByteBuf) {
-        //如果被切片ByteBuf也是AbstractUnpooledSlicedByteBuf对象
+        // 如果被切片ByteBuf也是AbstractUnpooledSlicedByteBuf对象
         this.buffer = ((AbstractUnpooledSlicedByteBuf) buffer).buffer;
         adjustment = ((AbstractUnpooledSlicedByteBuf) buffer).adjustment + index;
     } else if (buffer instanceof DuplicatedByteBuf) {
-        //如果被切片ByteBuf为DuplicatedByteBuf对象，则用unwrap得到实际存储数据的ByteBuf赋值buffer
+        // 如果被切片ByteBuf为DuplicatedByteBuf对象，则
+        // 用unwrap得到实际存储数据的ByteBuf赋值buffer
         this.buffer = buffer.unwrap();
         adjustment = index;
     } else {
-        //如果被切片ByteBuf为一般ByteBuf对象，则直接赋值buffer
+        // 如果被切片ByteBuf为一般ByteBuf对象，则直接赋值buffer
         this.buffer = buffer;
         adjustment = index;
     }
@@ -89,45 +91,46 @@ private int addComponent0(boolean increaseWriterIndex, int cIndex, ByteBuf buffe
     assert buffer != null;
     boolean wasAdded = false;
     try {
-        //检查新增的component的索引是否合法
+        // 检查新增的component的索引是否合法
         checkComponentIndex(cIndex);
 
-        //buffer的长度
+        // buffer的长度
         int readableBytes = buffer.readableBytes();
 
         // No need to consolidate - just add a component to the list.
         @SuppressWarnings("deprecation")
-        //统一为大端ByteBuf
+        // 统一为大端ByteBuf
         Component c = new Component(buffer.order(ByteOrder.BIG_ENDIAN).slice());
         if (cIndex == components.size()) {
-            //如果索引等于components的大小，则加在components尾部
+            // 如果索引等于components的大小，则加在components尾部
             wasAdded = components.add(c);
             if (cIndex == 0) {
-                //如果components中只有一个元素
+                // 如果components中只有一个元素
                 c.endOffset = readableBytes;
             } else {
-                //如果components中有多个元素
+                // 如果components中有多个元素
                 Component prev = components.get(cIndex - 1);
                 c.offset = prev.endOffset;
                 c.endOffset = c.offset + readableBytes;
             }
         } else {
-            //如果新的ByteBuf是插在components中间
+            // 如果新的ByteBuf是插在components中间
             components.add(cIndex, c);
             wasAdded = true;
             if (readableBytes != 0) {
-                //如果components的大小不为0,则依次更新cIndex之后的所有components的offset和endOffset
+                // 如果components的大小不为0,则依次更新cIndex之后的
+                // 所有components的offset和endOffset
                 updateComponentOffsets(cIndex);
             }
         }
         if (increaseWriterIndex) {
-            //如果要更新writerIndex
+            // 如果要更新writerIndex
             writerIndex(writerIndex() + buffer.readableBytes());
         }
         return cIndex;
     } finally {
         if (!wasAdded) {
-            //如果没添加成功，则释放ByteBuf
+            // 如果没添加成功，则释放ByteBuf
             buffer.release();
         }
     }
@@ -143,22 +146,22 @@ private int addComponent0(boolean increaseWriterIndex, int cIndex, ByteBuf buffe
 ```java
 @Override
 public CompositeByteBuf getBytes(int index, ByteBuf dst, int dstIndex, int length) {
-    //检查索引是否越界
+    // 查索引是否越界
     checkDstIndex(index, length, dstIndex, dst.capacity());
     if (length == 0) {
         return this;
     }
 
-    //用二分搜索查找index对应的Component在components中的索引
+    // 用二分搜索查找index对应的Component在components中的索引
     int i = toComponentIndex(index);
-    //循环读直至length为0
+    // 循环读直至length为0
     while (length > 0) {
         Component c = components.get(i);
         ByteBuf s = c.buf;
         int adjustment = c.offset;
-        //取length和ByteBuf剩余字节数中的较小值
+        // 取length和ByteBuf剩余字节数中的较小值
         int localLength = Math.min(length, s.capacity() - (index - adjustment));
-        //开始索引为index - c.offset，而不是0
+        // 开始索引为index - c.offset，而不是0
         s.getBytes(index - adjustment, dst, dstIndex, localLength);
         index += localLength;
         dstIndex += localLength;
