@@ -47,7 +47,7 @@ public void channelRead0(ChannelHandlerContext ctx, String msg) throws Exception
 
 可以看到在没开启SSL的情况下handler是通过 `DefaultFileRegion` 类传输文件的，而 `DefaultFileRegion` 是 `FileRegion` 接口的一个实现， `FileRegion` 的注释是这么写的：
 
-> A region of a file that is sent via a * Channel * which supports <a href="http://en.wikipedia.org/wiki/Zero-copy">zero-copy file transfer</a>.
+> A region of a file that is sent via a *Channel* which supports <a href="http://en.wikipedia.org/wiki/Zero-copy">zero-copy file transfer</a>.
 
  `FileRegion` 内部封装了 Java NIO 的 `FileChannel.transferTo()` 方法，要了解 `FileRegion` 的 `Zero-copy` 的原理，我们得先了解 `transferTo()` 方法。
 
