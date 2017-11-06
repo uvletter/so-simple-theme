@@ -60,9 +60,9 @@ Socket.send(socket, buf, len);
 
 尽管上面的代码看起来很简单，但在内部实际包含了4次用户态-内核态上下文切换，和4次数据拷贝。
 
-![上下文切换示意图][1]
+![上下文切换示意图][2]
 
-![数据拷贝示意图][2]
+![数据拷贝示意图][1]
 
 其中步骤有：
 
@@ -99,9 +99,9 @@ public void transferTo(long position, long count, WritableByteChannel target);
 ssize_t sendfile(int out_fd, int in_fd, off_t *offset, size_t count);
 ```
 
-![transferTo上下文切换][3]
+![transferTo上下文切换][4]
 
-![transferTo数据拷贝][4]
+![transferTo数据拷贝][3]
 
 可以看到我们将上下文切换已经从4次减少到2次，同时把数据拷贝从4次减少到3次（只有1次 `CPU` 参与，另外2次 `DMA` 引擎完成），那么我们可不可以把这唯一一次CPU参与的数据拷贝也省掉呢？
 
@@ -193,7 +193,9 @@ static int read(FileDescriptor var0, ByteBuffer var1, long var2, NativeDispatche
 ## 参考
 
 1) [对于 Netty ByteBuf 的零拷贝(Zero Copy) 的理解](https://segmentfault.com/a/1190000007560884)
+
 2) [Efficient data transfer through zero copy](https://www.ibm.com/developerworks/library/j-zerocopy/)
+
 3) [堆外内存 之 DirectByteBuffer 详解](http://www.jianshu.com/p/007052ee3773)
 
 
