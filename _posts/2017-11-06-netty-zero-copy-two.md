@@ -78,7 +78,7 @@ Socket.send(socket, buf, len);
 
 对IO函数有了解的童鞋肯定知道，在IO函数的背后有一个缓冲区 `buffer` ，我们平常的读和写操作并不是直接和底层硬件设备打交道，而是通过一块叫缓冲区的内存区域缓存数据来间接读写。我们知道，和CPU、高速缓存、内存比，磁盘、网卡这些设备属于慢速设备，交换一次数据要花很多时间，同时会消耗总线传输带宽，所以我们要尽量降低和这些设备打交道的频率，而使用缓冲区中转数据就是为了这个目的。
 
-引用参考文献[2]中的话：
+引用参考文献2中的话：
 
 > Using the intermediate buffer on the read side allows the kernel buffer to act as a "readahead cache" when the application hasn't asked for as much data as the kernel buffer holds. This significantly improves performance when the requested data amount is less than the kernel buffer size. The intermediate buffer on the write side allows the write to complete asynchronously. 
 
@@ -119,7 +119,7 @@ ssize_t sendfile(int out_fd, int in_fd, off_t *offset, size_t count);
 
 `DirectByteBuffer` 是 Java NIO 用于实现堆外内存的一个很重要的类，而 `Netty` 用 `DirectByteBuffer` 作为`PooledDirectByteBuf` 和 `UnpooledDirectByteBuf` 的内部数据容器（区别于 `HeapByteBuf` 直接用 `byte[]` 作为数据容器），以使用和操纵堆外内存。要了解 `DirectByteBuffer` 怎么实现 `Zero-copy`，我们要先了解 `DirectByteBuffer` 这个类和堆外内存。
 
-![DirectByteBuffer继承关系][6]
+![DirectByteBuffer继承关系][7]
 
 `DirectByteBuffer` 类本身还是位于Java内存模型的堆中，堆内存是JVM可以直接管控、操纵的内存，而 `DirectByteBuffer` 中的 `unsafe.allocateMemory(size)` 是一个native方法，这个方法分配的是堆外内存，通过 C 的 `malloc` 来进行分配的。分配的内存是在系统本地的内存，并不在Java的内存中，也不属于JVM管控范围，所以在 `DirectByteBuffer` 一定会存在某种方式操纵堆外内存。
 
@@ -141,7 +141,7 @@ JNI方法访问的内存区域是一个已经确定的内存区域，如果该�
 
 为了解决上述的问题，一般会做一个堆内存与堆外内存之间数据拷贝的操作：比如我们要完成一个从文件中读数据到堆内存的操作，即 `FileChannelImpl.read(HeapByteBuffer)` ,这里实际上File I/O会将数据读到堆外内存中，然后堆外内存再将数据拷贝到堆内存，这样我们就读到了文件中的内容。
 
-![FileChannelImpl.read][7]
+![FileChannelImpl.read][6]
 
 ```java
 static int read(FileDescriptor var0, ByteBuffer var1, long var2, NativeDispatcher var4) throws IOException {
@@ -192,9 +192,9 @@ static int read(FileDescriptor var0, ByteBuffer var1, long var2, NativeDispatche
 
 ## 参考
 
-[1] [对于 Netty ByteBuf 的零拷贝(Zero Copy) 的理解](https://segmentfault.com/a/1190000007560884)
-[2] [Efficient data transfer through zero copy](https://www.ibm.com/developerworks/library/j-zerocopy/)
-[3] [堆外内存 之 DirectByteBuffer 详解](http://www.jianshu.com/p/007052ee3773)
+1. [对于 Netty ByteBuf 的零拷贝(Zero Copy) 的理解](https://segmentfault.com/a/1190000007560884)
+2. [Efficient data transfer through zero copy](https://www.ibm.com/developerworks/library/j-zerocopy/)
+3. [堆外内存 之 DirectByteBuffer 详解](http://www.jianshu.com/p/007052ee3773)
 
 
   [1]: /images/bVzP6n.gif
