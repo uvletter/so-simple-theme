@@ -135,7 +135,7 @@ long address;
 
 `address` 表示分配的堆外内存的地址，JNI对这个堆外内存的操作都是通过这个 `address` 实现的。
 
-在回答为什么堆外内存可以实现 `Zero-copy` 前，我们先要明确一个结论，那就是 **操作系统不能直接访问Java堆的内存区域 **。
+在回答为什么堆外内存可以实现 `Zero-copy` 前，我们先要明确一个结论，那就是 **操作系统不能直接访问Java堆的内存区域**。
 
 JNI方法访问的内存区域是一个已经确定的内存区域，如果该内存地址指向的是一个Java堆内存的话，在操作系统正在访问这个内存地址时，JVM在这个时候进行了GC操作，GC经常会进行先标记再压缩的操作，即将可回收的空间做标记，然后清空标记位置的内存，然后会进行一个压缩，压缩会涉及到对象的移动，以腾出一块更加完整、连续的内存空间，以容纳更大的新对象，但是这个移动的过程会使JNI调用的数据错乱。
 
@@ -192,9 +192,9 @@ static int read(FileDescriptor var0, ByteBuffer var1, long var2, NativeDispatche
 
 ## 参考
 
-1. [对于 Netty ByteBuf 的零拷贝(Zero Copy) 的理解](https://segmentfault.com/a/1190000007560884)
-2. [Efficient data transfer through zero copy](https://www.ibm.com/developerworks/library/j-zerocopy/)
-3. [堆外内存 之 DirectByteBuffer 详解](http://www.jianshu.com/p/007052ee3773)
+1) [对于 Netty ByteBuf 的零拷贝(Zero Copy) 的理解](https://segmentfault.com/a/1190000007560884)
+2) [Efficient data transfer through zero copy](https://www.ibm.com/developerworks/library/j-zerocopy/)
+3) [堆外内存 之 DirectByteBuffer 详解](http://www.jianshu.com/p/007052ee3773)
 
 
   [1]: /images/bVzP6n.gif
