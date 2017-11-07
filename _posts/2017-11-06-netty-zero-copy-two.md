@@ -2,7 +2,7 @@
 layout: post
 title: Netty 之 Zero-copy 的实现（下）
 excerpt: 上一篇说到了 `CompositeByteBuf` ，这一篇接着上篇的内容讲下去。
-modified: 2017-11-06 23:51:00 +08:00
+modified: 2017-11-07 21:57:00 +08:00
 categories: articles
 tags: [Java, Netty]
 comments: true
@@ -14,7 +14,7 @@ share: true
 
 ## FileRegion
 
-让我们先看一个Netty官方的example
+让我们看一个Netty官方的例子
 
 ```java
 // netty-netty-4.1.16.Final\example\src\main\java\io\netty\example\file\FileServerHandler.java
@@ -45,13 +45,13 @@ public void channelRead0(ChannelHandlerContext ctx, String msg) throws Exception
 }
 ```
 
-可以看到在没开启SSL的情况下handler是通过 `DefaultFileRegion` 类传输文件的，而 `DefaultFileRegion` 是 `FileRegion` 接口的一个实现， `FileRegion` 的注释是这么写的：
+可以看到在没开启SSL的情况下handler是通过 `DefaultFileRegion` 传输文件的，`DefaultFileRegion` 是 `FileRegion` 接口的一个实现，在 `FileRegion` 的接口说明上可以看到这样一行：
 
 > A region of a file that is sent via a *Channel* which supports <a href="http://en.wikipedia.org/wiki/Zero-copy">zero-copy file transfer</a>.
 
- `FileRegion` 内部封装了 Java NIO 的 `FileChannel.transferTo()` 方法，要了解 `FileRegion` 的 `Zero-copy` 的原理，我们得先了解 `transferTo()` 方法。
+其内部实现是通过 Java NIO 的 `FileChannel.transferTo()` 方法。
 
-让我们看一段传输文件的一般写法吧。
+先让我们看一段传输文件的一般写法吧。
 
 ```java
 File.read(file, buf, len);
@@ -78,7 +78,7 @@ Socket.send(socket, buf, len);
 
 对IO函数有了解的童鞋肯定知道，在IO函数的背后有一个缓冲区 `buffer` ，我们平常的读和写操作并不是直接和底层硬件设备打交道，而是通过一块叫缓冲区的内存区域缓存数据来间接读写。我们知道，和CPU、高速缓存、内存比，磁盘、网卡这些设备属于慢速设备，交换一次数据要花很多时间，同时会消耗总线传输带宽，所以我们要尽量降低和这些设备打交道的频率，而使用缓冲区中转数据就是为了这个目的。
 
-引用参考文献2中的话：
+引用参考资料2中的话：
 
 > Using the intermediate buffer on the read side allows the kernel buffer to act as a "readahead cache" when the application hasn't asked for as much data as the kernel buffer holds. This significantly improves performance when the requested data amount is less than the kernel buffer size. The intermediate buffer on the write side allows the write to complete asynchronously. 
 
@@ -131,7 +131,7 @@ ssize_t sendfile(int out_fd, int in_fd, off_t *offset, size_t count);
 long address;
 ```
 
-`address` 只会被直接缓存给使用到。之所以将 `address` 属性升级放在 `Buffer` 中，是为了在JNI调用 `GetDirectBufferAddress` 时提高效率。
+`address` 只会被 `DirectByteBuffer` 使用到，之所以将 `address` 属性升级放在 `Buffer` 中，是为了在JNI调用 `GetDirectBufferAddress` 时提高效率。
 
 `address` 表示分配的堆外内存的地址，JNI对这个堆外内存的操作都是通过这个 `address` 实现的。
 
